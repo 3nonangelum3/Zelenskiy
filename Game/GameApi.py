@@ -1,4 +1,4 @@
-from Localization.LocalizationAPI import localise
+from Localization.LocalizationAPI import localise, unlocalize, getLanguage
 
 # var-list
 params = {}
@@ -28,7 +28,7 @@ def gameInit():
     :return:
     """
     global language
-    language = Localization.LocalizationAPI.getLanguage()
+    language = getLanguage()
 
     global params, currentOfferIndex, maxOfferInder, daysAlive
     params["influence"] = 50

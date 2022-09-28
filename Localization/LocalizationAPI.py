@@ -53,7 +53,7 @@ def unlocalize(language: str, value: str) -> str | None:
     if language in LocalizationLanguages.languages:
         searchDict = LocalizationData.valueList[getLanguageIndex(language)] or None
         if value in list(searchDict.keys()):
-            return searchDict[value]
+            return str(searchDict[value])
         else:
             return None
     else:

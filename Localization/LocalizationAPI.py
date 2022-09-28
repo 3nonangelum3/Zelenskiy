@@ -1,5 +1,5 @@
-import LocalizationData
-import LocalizationLanguages
+from Localization import LocalizationData
+from Localization import LocalizationLanguages
 
 
 def getLanguage() -> str:

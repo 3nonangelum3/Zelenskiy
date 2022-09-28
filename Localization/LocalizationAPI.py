@@ -9,10 +9,10 @@ def getLanguage() -> str:
     """
     language = ""
     while language == "":
-        language = input("What language do you prefer?\n"
+        language = input("\nWhat language do you prefer?\n"
                          "Какой язык Вы предпочитаете?\n"
                          "Якій мові Ви надаєте перевагу?\n"
-                         "English, Русский язык, Українська мова\n"
+                         "- English,\n- Русский язык,\n- Українська мова\n\n"
                          ">>> ")
         try:
             ["English", "Русский язык", "Українська мова"].index(language)

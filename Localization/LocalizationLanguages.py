@@ -1,3 +1,3 @@
-languageIndex = ["English",
+languages = ["English",
                  "Русский язык",
                  "Українська мова"]

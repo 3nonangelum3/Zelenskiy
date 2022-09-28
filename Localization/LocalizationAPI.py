@@ -21,7 +21,7 @@ def getLanguage() -> str:
     return language
 
 
-def getLanguageIndex(language: str) -> int:
+def getLanguageIndex(language: str) -> int | None:
     """
     Searches for language in a language list and returns it`s index.
     :param language: language of the interface
@@ -33,7 +33,7 @@ def getLanguageIndex(language: str) -> int:
         return None
 
 
-def localise(language: str, varName: str):
+def localise(language: str, varName: str) -> str | None:
     """
     Searches for the value of given variable name in the list on given language
     :param language: language of the interface
@@ -43,5 +43,18 @@ def localise(language: str, varName: str):
     if language in LocalizationLanguages.languages:
         if varName in LocalizationData.varList:
             return LocalizationData.varList[varName][getLanguageIndex(language) or 0] or 0
+        else:
+            return None
+    else:
+        return None
+
+
+def unlocalize(language: str, value: str) -> str | None:
+    if language in LocalizationLanguages.languages:
+        searchDict = LocalizationData.valueList[getLanguageIndex(language)] or None
+        if value in list(searchDict.keys()):
+            return searchDict[value]
+        else:
+            return None
     else:
         return None

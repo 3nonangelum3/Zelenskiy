@@ -8,10 +8,13 @@ maxOfferInder = 0
 # aka score
 daysAlive = 0
 language: str = ""
+# system vars
+loadDeclined = False
+loadSuccess = False
 
 
 # functions
-def loadGame() -> bool:
+def loadGame() -> bool | None:
     """
     Asks user if they want to load previous game
     :return: True if Yes and False if No
@@ -22,18 +25,45 @@ def loadGame() -> bool:
         load = unlocalize(language, load)
         if load:
             try:
-                if load == "False":
-                    return False
-                elif load == "True":
+                if load == "True":
                     return True
+                elif load == "False":
+                    global loadDeclined
+                    loadDeclined = True
+                    return False
                 else:
-                    return None
+                    load = ""
             except TypeError:
                 load = ""
 
 
-def getDataCode(code: str):
-    return {}
+def nonValidCode():
+    print(localise(language, "invalidCode"))
+    global loadSuccess
+    loadSuccess = False
+
+
+def getDataCode(code: str) -> dict | None:
+    encoded = {}
+    if len(code) < 13:
+        nonValidCode()
+        return None
+    else:
+        encodedCode = ""
+        for i in code:
+            encodedCode += chr(ord(i) - 15)
+        langCode = encodedCode[0] + encodedCode[1]
+        if langCode == 'en':
+            encoded["language"] = "English"
+        elif langCode == 'ru':
+            encoded["language"] = "Русский язык"
+        elif langCode == "uk":
+            encoded["language"] = "Українська мова"
+        else:
+            nonValidCode()
+            return None
+
+    return None
 
 
 def gameInit():
@@ -41,20 +71,19 @@ def gameInit():
     initialize all vaiables and lists before starting a game
     :return:
     """
-    global language
+    global language, loadSuccess, loadDeclined
     language = getLanguage()
-    dataLoaded = False
     dataList = {}
-    loading = loadGame()
-    if loading:
-        code = input(f"{localise(language, 'getCode')}\n>>> ")
-        if unlocalize(language, code) == "Stop":
-            print("Loading saved game stopped")
-        else:
-            dataList = getDataCode(code)
-            dataLoaded = True
+    while not loadSuccess and not loadDeclined:
+        if loadGame():
+            code = input(f"{localise(language, 'getCode')}\n\n>>> ")
+            if unlocalize(language, code) == "Stop":
+                print("Loading saved game stopped")
+            else:
+                dataList = getDataCode(code)
     global params, currentOfferIndex, maxOfferInder, daysAlive
-    if dataLoaded:
+    if loadSuccess:
+        language = dataList["language"]
         params["influence"] = dataList["influence"]
         params["people"] = dataList["people"]
         params["money"] = dataList["money"]
@@ -73,4 +102,5 @@ def gameInit():
 
 
 def gameStart():
+    print("end")
     pass

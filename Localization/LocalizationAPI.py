@@ -50,6 +50,12 @@ def localise(language: str, varName: str) -> str | None:
 
 
 def unlocalize(language: str, value: str) -> str | None:
+    """
+    Returns value of an answer from user in a given language
+    :param language: language of the interface
+    :param value: line that user has typed in
+    :return: stringified value of given value
+    """
     if language in LocalizationLanguages.languages:
         searchDict = LocalizationData.valueList[getLanguageIndex(language)] or None
         if value in list(searchDict.keys()):

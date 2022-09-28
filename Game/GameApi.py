@@ -1,40 +1,44 @@
+import Localization.LocalizationAPI
+
 #var-list
-influence = 0
-people = 0
-money = 0
-army = 0
 params = {}
+maxOfferIndex = 10
+daysAlive = 0
+language:str = ""
+languageIndex = {"English": 1,
+                 "Русский язык": 2,
+                 "Українська мова": 3}
+
+#functions
+def loadGame() -> bool:
+    """
+    Asks user if they want to load previous game
+    :return: True if Yes and False if No
+    """
+    load = ""
+    while load == "" or [].index(load) is None:
+        load = input("Do you want to load your previous game?\n"
+                 "Хотите загрузить свою предыдущую игру?\n"
+                 "Бажаєте завантажити свою попередню гру?\n"
+                 ">>> ")
+
 def gameInit():
-    language = getLanguage()
-    global influence
-    global people
-    global money
-    global army
-    influence = 50
-    people = 50
-    money = 50
-    army = 50
-    if language == "English":
-        params["influence"] = influence
-        params[]
-    pass
-
-
-def getLanguage() -> str:
     """
-    Asks user to input a language of an interface until valid language will be inputted
+    initialize all vaiables and lists before starting a game
+    :return:
     """
+    global language
+    language = Localization.LocalizationAPI.getLanguage()
 
-    language = input("What language do you prefer?\n"
-                     "Какой язык Вы предпочитаете?\n"
-                     "Якій мові Ви надаєте перевагу?\n"
-                     ">>> ")
-    while language == "" or ["English", "Русский язык", "Українська мова"].index(language) is None:
-        language = input("What language do you prefer?\n"
-                         "Какой язык Вы предпочитаете?\n"
-                         "Якій мові Ви надаєте перевагу?\n"
-                         ">>> ")
-    return language
+    global params, maxOfferIndex, daysAlive, language
+    params["influence"] = 50
+    params["people"] = 50
+    params["money"] = 50
+    params["army"] = 50
+    maxOfferIndex = 10
+    daysAlive = 0
+
+
 
 
 def gameStart():

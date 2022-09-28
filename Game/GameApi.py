@@ -1,4 +1,4 @@
-import Localization.LocalizationAPI
+from Localization.LocalizationAPI import localise
 
 # var-list
 params = {}
@@ -17,11 +17,9 @@ def loadGame() -> bool:
     :return: True if Yes and False if No
     """
     load = ""
-    while load == "" or [].index(load) is None:
-        load = input("Do you want to load your previous game?\n"
-                     "Хотите загрузить свою предыдущую игру?\n"
-                     "Бажаєте завантажити свою попередню гру?\n"
-                     ">>> ")
+    while load == "":
+        load = input(f"{localise(language, 'gameLoad')}\n\n>>> ")
+
 
 
 def gameInit():

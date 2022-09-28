@@ -32,7 +32,7 @@ def gameInit():
     global language
     language = Localization.LocalizationAPI.getLanguage()
 
-    global params, currentOfferIndex, maxOfferInder, daysAlive, language
+    global params, currentOfferIndex, maxOfferInder, daysAlive
     params["influence"] = 50
     params["people"] = 50
     params["money"] = 50

@@ -43,9 +43,9 @@ def nonValidCode():
     loadSuccess = False
 
 
-def getDataCode(code: str) -> dict | None:
+def getDataFromCode(code: str) -> dict | None:
     encoded = {}
-    if len(code) < 13:
+    if 10 < len(code) < 15:
         nonValidCode()
         return None
     else:
@@ -62,6 +62,20 @@ def getDataCode(code: str) -> dict | None:
         else:
             nonValidCode()
             return None
+        days = ""
+        for i in range(10, len(encodedCode)):
+            days += encodedCode[i]
+        try:
+            encoded["influence"] = int(encodedCode[2] + encodedCode[3])
+            encoded["people"] = int(encodedCode[2] + encodedCode[3])
+            encoded["money"] = int(encodedCode[4] + encodedCode[5])
+            encoded["army"] = int(encodedCode[6] + encodedCode[7])
+            encoded["currentOfferIndex"] = int(encodedCode[8] + encodedCode[9])
+            encoded["daysAlive"] = int(days)
+        except TypeError:
+            nonValidCode()
+            return None
+
 
     return None
 
@@ -80,7 +94,7 @@ def gameInit():
             if unlocalize(language, code) == "Stop":
                 print("Loading saved game stopped")
             else:
-                dataList = getDataCode(code)
+                dataList = getDataFromCode(code)
     global params, currentOfferIndex, maxOfferInder, daysAlive
     if loadSuccess:
         language = dataList["language"]
@@ -102,5 +116,5 @@ def gameInit():
 
 
 def gameStart():
-    print("end")
+    print(localise(language, "foreword"))
     pass

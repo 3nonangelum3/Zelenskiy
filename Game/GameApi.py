@@ -141,4 +141,6 @@ def gameStart():
             startGame = ""
     print("<---------------------------->")
     print(localise(language, "foreword"))
+    while True:
+        pass
     pass

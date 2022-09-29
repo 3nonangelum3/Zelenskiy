@@ -25,10 +25,12 @@ def loadGame() -> bool | None:
         load = unlocalize(language, load)
         if load:
             try:
+                global loadDeclined
                 if load == "True":
+                    loadDeclined = False
                     return True
                 elif load == "False":
-                    global loadDeclined
+
                     loadDeclined = True
                     return False
                 else:
@@ -38,17 +40,22 @@ def loadGame() -> bool | None:
 
 
 def nonValidCode():
+    """
+    Initialises a proses of non-valid code report to user
+    """
     print(localise(language, "invalidCode"))
     global loadSuccess
     loadSuccess = False
 
 
 def getDataFromCode(code: str) -> dict | None:
+    """
+    Decodes given code. If one part of the code is undecipherable returns null
+    :param code: String that contains coded params
+    :return: A dictionary filled with parameters found in code
+    """
     encoded = {}
     if 10 < len(code) < 15:
-        nonValidCode()
-        return None
-    else:
         encodedCode = ""
         for i in code:
             encodedCode += chr(ord(i) - 15)
@@ -75,9 +82,10 @@ def getDataFromCode(code: str) -> dict | None:
         except TypeError:
             nonValidCode()
             return None
-
-
-    return None
+        return encoded
+    else:
+        nonValidCode()
+        return None
 
 
 def gameInit():
@@ -115,6 +123,22 @@ def gameInit():
         daysAlive = 0
 
 
+def quitGame():
+    pass
+
+
 def gameStart():
+    print(localise(language, "gameUI"))
+    startGame = ""
+    while startGame == "":
+        startGame = input(localise(language, "startGame") + "\n\n>>> ")
+        startGame = unlocalize(language, startGame)
+        if startGame == "False":
+            quitGame()
+        elif startGame == "True":
+            print(localise(language, "gameStarts"))
+        else:
+            startGame = ""
+    print("<---------------------------->")
     print(localise(language, "foreword"))
     pass

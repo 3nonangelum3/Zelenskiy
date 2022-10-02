@@ -15,6 +15,7 @@ offers = [
             "army": 0,
             "money": 0,
             "people": 0
-        }
+        },
+        10  # days takes to do this
     ]
 ]

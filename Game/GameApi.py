@@ -1,9 +1,13 @@
+import random
+
+import Game.Offers
+import Localization.LocalizationAPI
 from Localization.LocalizationAPI import localise, unlocalize, getLanguage
 
 # var-list
 params = {}
 # will be used to decide how much cards to use
-currentOfferIndex = 10
+currentOfferMaxIndex = 10
 maxOfferInder = 0
 # aka score
 daysAlive = 0
@@ -11,6 +15,8 @@ language: str = ""
 # system vars
 loadDeclined = False
 loadSuccess = False
+gameQuit = False
+saveGame = False
 
 
 # functions
@@ -77,7 +83,7 @@ def getDataFromCode(code: str) -> dict | None:
             encoded["people"] = int(encodedCode[2] + encodedCode[3])
             encoded["money"] = int(encodedCode[4] + encodedCode[5])
             encoded["army"] = int(encodedCode[6] + encodedCode[7])
-            encoded["currentOfferIndex"] = int(encodedCode[8] + encodedCode[9])
+            encoded["currentOfferMaxIndex"] = int(encodedCode[8] + encodedCode[9])
             encoded["daysAlive"] = int(days)
         except TypeError:
             nonValidCode()
@@ -103,7 +109,7 @@ def gameInit():
                 print("Loading saved game stopped")
             else:
                 dataList = getDataFromCode(code)
-    global params, currentOfferIndex, maxOfferInder, daysAlive
+    global params, currentOfferMaxIndex, maxOfferInder, daysAlive
     if loadSuccess:
         language = dataList["language"]
         params["influence"] = dataList["influence"]
@@ -111,7 +117,7 @@ def gameInit():
         params["money"] = dataList["money"]
         params["army"] = dataList["army"]
         maxOfferIndex = 0
-        currentOfferIndex = dataList["currentOfferIndex"]
+        currentOfferMaxIndex = dataList["currentOfferMaxIndex"]
         daysAlive = dataList["daysAlive"]
     else:
         params["influence"] = 50
@@ -119,12 +125,32 @@ def gameInit():
         params["money"] = 50
         params["army"] = 50
         maxOfferIndex = 0
-        currentOfferIndex = 0
+        currentOfferMaxIndex = 0
         daysAlive = 0
 
 
-def quitGame():
-    pass
+def listActions():
+    print(Localization.LocalizationAPI.localise(language, "commandsList"))
+
+
+def codeCreator() -> str:
+    code = ""
+    if language == "English":
+        code += "en"
+    elif language == "Русский язык":
+        code += "ru"
+    elif language == "Українська мова":
+        code += "uk"
+    code += params["influence"]
+    code += params["army"]
+    code += params["money"]
+    code += params["people"]
+    code += str(currentOfferMaxIndex)
+    code += str(daysAlive)
+    result = ""
+    for i in code:
+        result += chr(ord(i) + 15)
+    return result
 
 
 def gameStart():
@@ -134,13 +160,44 @@ def gameStart():
         startGame = input(localise(language, "startGame") + "\n\n>>> ")
         startGame = unlocalize(language, startGame)
         if startGame == "False":
-            quitGame()
+            global gameQuit
+            gameQuit = False
         elif startGame == "True":
             print(localise(language, "gameStarts"))
         else:
             startGame = ""
     print("<---------------------------->")
     print(localise(language, "foreword"))
+    global saveGame, gameQuit
     while True:
-        pass
-    pass
+        currentOffer = Game.Offers.offers[random.randint(0, currentOfferMaxIndex)]
+        print(currentOffer[Localization.LocalizationAPI.getLanguageIndex(language)])
+        userInput = input(">>> ")
+        while userInput != "accept" or userInput != "decline":
+            if userInput == "list actions":
+                listActions()
+            elif userInput == "quit":
+                gameQuit = False
+            elif userInput == "save game":
+                saveGame = True
+            userInput = input(">>> ")
+        if userInput == "accept":
+            for i in range(len(params)):
+                params["influence"] += currentOffer[3]["influence"]
+                params["army"] += currentOffer[3]["army"]
+                params["money"] += currentOffer[3]["money"]
+                params["people"] += currentOffer[3]["people"]
+        elif userInput == "decline":
+            for i in range(len(params)):
+                params["influence"] += currentOffer[4]["influence"]
+                params["army"] += currentOffer[4]["army"]
+                params["money"] += currentOffer[4]["money"]
+                params["people"] += currentOffer[4]["people"]
+        elif saveGame:
+            print("Saving game\n"
+                  "This is a token that you would need to continue playing your game later:\n"
+                  f"{codeCreator()}")
+            gameQuit = True
+        elif gameQuit:
+            break
+    print("Thanks for playing!!!")

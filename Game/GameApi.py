@@ -182,17 +182,17 @@ def gameStart():
                 saveGame = True
             userInput = input(">>> ")
         if userInput == "accept":
-            for i in range(len(params)):
-                params["influence"] += currentOffer[3]["influence"]
-                params["army"] += currentOffer[3]["army"]
-                params["money"] += currentOffer[3]["money"]
-                params["people"] += currentOffer[3]["people"]
+            for i in params:
+                params[i] += currentOffer[3][i]
+                if params[i] <= 0:
+                    gameQuit = True
+                    saveGame = False
         elif userInput == "decline":
-            for i in range(len(params)):
-                params["influence"] += currentOffer[4]["influence"]
-                params["army"] += currentOffer[4]["army"]
-                params["money"] += currentOffer[4]["money"]
-                params["people"] += currentOffer[4]["people"]
+            for i in params:
+                params[i] += currentOffer[4][i]
+                if params[i] <= 0:
+                    gameQuit = True
+                    saveGame = False
         elif saveGame:
             print("Saving game\n"
                   "This is a token that you would need to continue playing your game later:\n"

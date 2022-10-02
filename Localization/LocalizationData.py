@@ -63,7 +63,7 @@ varList = {
         "<accept> - прийняти надану пропозицію\n"
         "<decline> - відхилити надану пропозицію\n"
         "<quit> - завершує гру\n"
-        "<save game - зберегти поточну гру"
+        "<save game> - зберегти поточну гру"
     ],
     "startGame": [
         "Do you want to start game? <Yes> or <No>\n"
